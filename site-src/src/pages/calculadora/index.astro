@@ -1,0 +1,256 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+<Layout title="Calculadora de inversión" description="Simula cuánto podrías acumular invirtiendo mensualmente durante cierta cantidad de años.">
+  <div class="prose">
+    <span class="panel-tag mono">// calculadora_de_inversion</span>
+    <h1>Calculadora de inversión</h1>
+    <p>
+      Simula cuánto podrías acumular invirtiendo un monto fijo cada mes, durante cierta
+      cantidad de años, asumiendo una rentabilidad anual esperada. <strong>Es una
+      simulación educativa</strong> — el porcentaje de rentabilidad lo defines tú como
+      supuesto, no es una promesa ni una proyección garantizada de ningún instrumento.
+    </p>
+  </div>
+
+  <div class="data-panel calc-panel">
+    <span class="panel-tag">[ SIMULADOR ]</span>
+
+    <div class="calc-grid">
+      <label class="calc-field">
+        <span>Aporte mensual</span>
+        <div class="calc-input-wrap">
+          <span class="mono prefix">$</span>
+          <input type="number" id="aporte" min="0" step="1" value="100" />
+        </div>
+      </label>
+
+      <label class="calc-field">
+        <span>Aporte inicial (opcional)</span>
+        <div class="calc-input-wrap">
+          <span class="mono prefix">$</span>
+          <input type="number" id="inicial" min="0" step="1" value="0" />
+        </div>
+      </label>
+
+      <label class="calc-field">
+        <span>Rentabilidad anual esperada</span>
+        <div class="calc-input-wrap">
+          <input type="number" id="tasa" min="0" step="0.1" value="8" />
+          <span class="mono suffix">%</span>
+        </div>
+      </label>
+
+      <label class="calc-field">
+        <span>Plazo</span>
+        <div class="calc-input-wrap">
+          <input type="number" id="anios" min="1" step="1" value="10" />
+          <span class="mono suffix">años</span>
+        </div>
+      </label>
+    </div>
+
+    <div class="calc-results">
+      <div class="result-bar">
+        <div class="bar-aportado" id="bar-aportado"></div>
+        <div class="bar-ganancia" id="bar-ganancia"></div>
+      </div>
+      <div class="calc-stat-grid">
+        <div>
+          <span class="stat-label">Total aportado</span>
+          <span class="mono result-num" id="out-aportado">$0</span>
+        </div>
+        <div>
+          <span class="stat-label">Ganancia por interés compuesto</span>
+          <span class="mono result-num green" id="out-ganancia">$0</span>
+        </div>
+        <div>
+          <span class="stat-label">Total proyectado</span>
+          <span class="mono result-num gold" id="out-total">$0</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="prose" style="margin-top: 3rem;">
+    <h2>Cómo usarla, paso a paso</h2>
+    <ol class="steps">
+      <li>
+        <strong>Aporte mensual:</strong> cuánto vas a invertir cada mes, de forma
+        constante. Si aún no inviertes con regularidad, parte con un número realista
+        para tu presupuesto — la constancia importa más que el monto.
+      </li>
+      <li>
+        <strong>Aporte inicial (opcional):</strong> si ya tienes un monto ahorrado antes
+        de empezar los aportes mensuales, agrégalo aquí. Si vas a partir de cero, déjalo
+        en 0.
+      </li>
+      <li>
+        <strong>Rentabilidad anual esperada:</strong> el retorno promedio que asumes que
+        tu inversión podría generar al año. Este número <strong>lo eliges tú</strong> —
+        no es un dato que la calculadora conozca ni garantice. Instrumentos distintos
+        (dividendos, ETFs, acciones de crecimiento) tienen historiales de retorno muy
+        distintos; investiga antes de asumir una cifra.
+      </li>
+      <li>
+        <strong>Plazo:</strong> por cuántos años vas a mantener este plan de aportes.
+      </li>
+      <li>
+        <strong>Lee el resultado:</strong> la barra y los tres números de abajo se
+        actualizan al instante. "Total aportado" es la suma de todo lo que pusiste de tu
+        bolsillo; "Ganancia por interés compuesto" es lo que el supuesto de rentabilidad
+        habría generado encima; "Total proyectado" es la suma de ambos.
+      </li>
+    </ol>
+    <p>
+      <em>
+        Esta calculadora no constituye asesoría de inversión. Los resultados son una
+        proyección matemática basada en los supuestos que tú ingresas, no una garantía
+        de rentabilidad futura.
+      </em>
+    </p>
+  </div>
+
+  <script>
+    const $ = (id: string) => document.getElementById(id) as HTMLInputElement;
+
+    const fmt = (n: number) =>
+      '$' + Math.round(n).toLocaleString('es-CL');
+
+    function calcular() {
+      const aporte = parseFloat($('aporte').value) || 0;
+      const inicial = parseFloat($('inicial').value) || 0;
+      const tasaAnual = parseFloat($('tasa').value) || 0;
+      const anios = parseFloat($('anios').value) || 0;
+
+      const n = Math.max(anios, 0) * 12;
+      const r = (tasaAnual / 100) / 12;
+
+      let futuroAportes: number;
+      if (r === 0) {
+        futuroAportes = aporte * n;
+      } else {
+        futuroAportes = aporte * ((Math.pow(1 + r, n) - 1) / r);
+      }
+      const futuroInicial = inicial * Math.pow(1 + r, n);
+
+      const total = futuroAportes + futuroInicial;
+      const totalAportado = aporte * n + inicial;
+      const ganancia = Math.max(total - totalAportado, 0);
+
+      document.getElementById('out-aportado')!.textContent = fmt(totalAportado);
+      document.getElementById('out-ganancia')!.textContent = fmt(ganancia);
+      document.getElementById('out-total')!.textContent = fmt(total);
+
+      const pctAportado = total > 0 ? (totalAportado / total) * 100 : 100;
+      const pctGanancia = 100 - pctAportado;
+      document.getElementById('bar-aportado')!.style.width = pctAportado + '%';
+      document.getElementById('bar-ganancia')!.style.width = pctGanancia + '%';
+    }
+
+    ['aporte', 'inicial', 'tasa', 'anios'].forEach((id) => {
+      $(id).addEventListener('input', calcular);
+    });
+
+    calcular();
+  </script>
+
+  <style>
+    .calc-panel { margin-top: 1.5rem; }
+
+    .calc-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1.25rem;
+      margin: 1.25rem 0 1.75rem;
+    }
+
+    .calc-field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .calc-field span:first-child {
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+
+    .calc-input-wrap {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: rgba(0,0,0,0.2);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 0.45rem;
+      padding: 0.55rem 0.8rem;
+    }
+
+    .calc-input-wrap:focus-within {
+      border-color: var(--gold);
+    }
+
+    .calc-input-wrap input {
+      background: transparent;
+      border: none;
+      outline: none;
+      color: #F4F7FA;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1rem;
+      width: 100%;
+      min-width: 0;
+    }
+
+    .calc-input-wrap .prefix,
+    .calc-input-wrap .suffix {
+      color: var(--gold);
+      font-size: 0.85rem;
+      flex-shrink: 0;
+    }
+
+    .result-bar {
+      display: flex;
+      height: 10px;
+      border-radius: 999px;
+      overflow: hidden;
+      background: rgba(255,255,255,0.06);
+      margin-bottom: 1.5rem;
+    }
+
+    .bar-aportado {
+      background: var(--muted);
+      transition: width 0.25s ease;
+    }
+
+    .bar-ganancia {
+      background: var(--gold);
+      transition: width 0.25s ease;
+    }
+
+    .calc-stat-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .calc-stat-grid > div {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+
+    .result-num {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #F4F7FA;
+    }
+
+    .result-num.green { color: #2ECC71; }
+    .result-num.gold { color: var(--gold); font-size: 1.7rem; }
+
+    .steps li {
+      margin-bottom: 0.9rem;
+      color: #DCE6EF;
+    }
+  </style>
+</Layout>

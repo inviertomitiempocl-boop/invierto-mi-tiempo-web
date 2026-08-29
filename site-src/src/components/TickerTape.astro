@@ -15,13 +15,6 @@ const tickers = ['AAPL', 'SCHD', 'VICI', 'O', 'JEPI', 'KO', 'JNJ', 'NNN', 'STAG'
 <script define:vars={{ tickers }}>
   const API = 'http://69.6.227.205:8001/app/scores?tickers=' + tickers.join(',');
 
-  function scoreColor(ponderado) {
-    if (ponderado >= 80) return '#2ECC71';
-    if (ponderado >= 60) return '#F0A500';
-    if (ponderado >= 40) return '#FF9F40';
-    return '#FF5C5C';
-  }
-
   function renderItem(r) {
     const sym = document.createElement('span');
     sym.className = 'ticker-sym';
@@ -34,18 +27,8 @@ const tickers = ['AAPL', 'SCHD', 'VICI', 'O', 'JEPI', 'KO', 'JNJ', 'NNN', 'STAG'
       val.textContent = 's/d';
       val.style.color = '#5C7A99';
     } else {
-      const precio = '$' + r.precio_actual.toFixed(2);
-      const ponderado = r.score?.ponderado;
-      if (typeof ponderado === 'number') {
-        val.textContent = `${precio} · ${ponderado}`;
-        val.style.color = scoreColor(ponderado);
-      } else if (typeof r.dividend_yield === 'number') {
-        val.textContent = `${precio} · ${r.dividend_yield.toFixed(1)}%`;
-        val.style.color = '#F0A500';
-      } else {
-        val.textContent = precio;
-        val.style.color = '#B9C9DA';
-      }
+      val.textContent = '$' + r.precio_actual.toFixed(2);
+      val.style.color = '#B9C9DA';
     }
 
     const item = document.createElement('span');
