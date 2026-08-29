@@ -1,10 +1,17 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { Image } from 'astro:assets';
+import personaje from '../assets/personaje.png';
 ---
 <Layout title="Sobre el proyecto" description="Qué es Invierto Mi Tiempo y por qué existe.">
+  <div class="nosotros-hero">
+    <Image src={personaje} alt="Personaje de Invierto Mi Tiempo frente a sus pantallas de análisis" width={480} height={268} class="nosotros-img" />
+    <div class="prose">
+      <span class="panel-tag mono">// sobre_el_proyecto</span>
+      <h1>Sobre el proyecto</h1>
+    </div>
+  </div>
   <div class="prose">
-    <span class="panel-tag mono">// sobre_el_proyecto</span>
-    <h1>Sobre el proyecto</h1>
     <p>
       Invierto Mi Tiempo nació para mostrar, con transparencia, el proceso real de invertir en
       dividendos — no promesas de rentabilidad, sino el análisis detrás de cada decisión: qué
@@ -17,4 +24,28 @@ import Layout from '../layouts/Layout.astro';
       desarrollamos como parte de este proyecto.
     </p>
   </div>
+
+  <style>
+    .nosotros-hero {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+
+    .nosotros-img {
+      width: 220px;
+      height: auto;
+      border-radius: 0.75rem;
+      border: 1px solid rgba(255,255,255,0.08);
+      flex-shrink: 0;
+    }
+
+    .nosotros-hero .prose h1 { margin-top: 0.4rem; }
+
+    @media (max-width: 560px) {
+      .nosotros-img { width: 100%; max-width: 280px; }
+    }
+  </style>
 </Layout>

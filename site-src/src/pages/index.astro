@@ -1,5 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { Image } from 'astro:assets';
+import personaje from '../assets/personaje.png';
 ---
 <Layout title="Inicio" description="Dividendos, inversión y automatización — el proceso real de un inversionista, documentado.">
   <section class="hero">
@@ -12,17 +14,8 @@ import Layout from '../layouts/Layout.astro';
         rentabilidad: solo el proceso, los números, y lo que realmente funciona.
       </p>
     </div>
-    <div class="hero-chart" aria-hidden="true">
-      <svg viewBox="0 0 320 160" class="chart-svg">
-        <defs>
-          <linearGradient id="chartFill" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="#F0A500" stop-opacity="0.35" />
-            <stop offset="100%" stop-color="#F0A500" stop-opacity="0" />
-          </linearGradient>
-        </defs>
-        <polyline class="chart-line" points="0,120 40,110 70,125 100,90 140,95 170,60 200,70 230,40 260,45 320,10" />
-        <polygon class="chart-fill" fill="url(#chartFill)" points="0,120 40,110 70,125 100,90 140,95 170,60 200,70 230,40 260,45 320,10 320,160 0,160" />
-      </svg>
+    <div class="hero-portrait">
+      <Image src={personaje} alt="Personaje de Invierto Mi Tiempo frente a sus pantallas de análisis" width={520} height={290} />
     </div>
   </section>
 
@@ -101,28 +94,25 @@ import Layout from '../layouts/Layout.astro';
       margin: 0.75rem 0 1rem;
     }
 
-    .hero-chart {
+    .hero-portrait {
       background: rgba(255,255,255,0.03);
       border: 1px solid rgba(255,255,255,0.08);
       border-radius: 0.75rem;
-      padding: 1rem;
+      padding: 0.6rem;
+      opacity: 0;
+      animation: fade-in 0.8s ease forwards 0.15s;
     }
 
-    .chart-svg { width: 100%; height: auto; display: block; }
-
-    .chart-line {
-      fill: none;
-      stroke: #F0A500;
-      stroke-width: 2.5;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-      stroke-dasharray: 500;
-      stroke-dashoffset: 500;
-      animation: draw-line 1.8s ease forwards 0.2s;
+    .hero-portrait :global(img) {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 0.5rem;
     }
 
-    @keyframes draw-line {
-      to { stroke-dashoffset: 0; }
+    @keyframes fade-in {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     @media (max-width: 780px) {
