@@ -14,22 +14,28 @@ import Layout from '../../layouts/Layout.astro';
   </div>
 
   <div class="data-panel calc-panel">
-    <span class="panel-tag">[ SIMULADOR ]</span>
+    <div class="calc-panel-head">
+      <span class="panel-tag">[ SIMULADOR ]</span>
+      <div class="currency-toggle" role="group" aria-label="Moneda">
+        <button type="button" class="curr-btn active" data-currency="USD">USD</button>
+        <button type="button" class="curr-btn" data-currency="CLP">CLP</button>
+      </div>
+    </div>
 
     <div class="calc-grid">
       <label class="calc-field">
         <span>Aporte mensual</span>
         <div class="calc-input-wrap">
-          <span class="mono prefix">$</span>
-          <input type="number" id="aporte" min="0" step="1" value="100" />
+          <span class="mono prefix" id="prefix-aporte">US$</span>
+          <input type="number" id="aporte" min="0" step="10" value="100" />
         </div>
       </label>
 
       <label class="calc-field">
         <span>Aporte inicial (opcional)</span>
         <div class="calc-input-wrap">
-          <span class="mono prefix">$</span>
-          <input type="number" id="inicial" min="0" step="1" value="0" />
+          <span class="mono prefix" id="prefix-inicial">US$</span>
+          <input type="number" id="inicial" min="0" step="10" value="0" />
         </div>
       </label>
 
@@ -76,6 +82,12 @@ import Layout from '../../layouts/Layout.astro';
     <h2>Cómo usarla, paso a paso</h2>
     <ol class="steps">
       <li>
+        <strong>Moneda:</strong> elige USD o CLP arriba a la derecha del simulador,
+        según en qué moneda piensas tus aportes. Cambiar la moneda solo ajusta el
+        formato y los valores por defecto a montos típicos de esa moneda — no hace una
+        conversión cambiaria entre ambas.
+      </li>
+      <li>
         <strong>Aporte mensual:</strong> cuánto vas a invertir cada mes, de forma
         constante. Si aún no inviertes con regularidad, parte con un número realista
         para tu presupuesto — la constancia importa más que el monto.
@@ -114,8 +126,46 @@ import Layout from '../../layouts/Layout.astro';
   <script>
     const $ = (id: string) => document.getElementById(id) as HTMLInputElement;
 
-    const fmt = (n: number) =>
-      '$' + Math.round(n).toLocaleString('es-CL');
+    type Currency = 'USD' | 'CLP';
+    let currency: Currency = 'USD';
+
+    const CURRENCY_CONFIG: Record<Currency, {
+      symbol: string; locale: string; step: number; stepInicial: number;
+      defaultAporte: number; defaultInicial: number;
+    }> = {
+      USD: { symbol: 'US$', locale: 'en-US', step: 10, stepInicial: 100, defaultAporte: 100, defaultInicial: 0 },
+      CLP: { symbol: '$', locale: 'es-CL', step: 10000, stepInicial: 50000, defaultAporte: 100000, defaultInicial: 0 },
+    };
+
+    const fmt = (n: number) => {
+      const cfg = CURRENCY_CONFIG[currency];
+      return cfg.symbol + Math.round(n).toLocaleString(cfg.locale);
+    };
+
+    function setCurrency(next: Currency) {
+      currency = next;
+      const cfg = CURRENCY_CONFIG[next];
+
+      document.getElementById('prefix-aporte')!.textContent = cfg.symbol;
+      document.getElementById('prefix-inicial')!.textContent = cfg.symbol;
+
+      $('aporte').step = String(cfg.step);
+      $('inicial').step = String(cfg.stepInicial);
+      $('aporte').value = String(cfg.defaultAporte);
+      $('inicial').value = String(cfg.defaultInicial);
+
+      document.querySelectorAll('.curr-btn').forEach((btn) => {
+        btn.classList.toggle('active', (btn as HTMLElement).dataset.currency === next);
+      });
+
+      calcular();
+    }
+
+    document.querySelectorAll('.curr-btn').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        setCurrency((btn as HTMLElement).dataset.currency as Currency);
+      });
+    });
 
     function calcular() {
       const aporte = parseFloat($('aporte').value) || 0;
@@ -157,6 +207,46 @@ import Layout from '../../layouts/Layout.astro';
 
   <style>
     .calc-panel { margin-top: 1.5rem; }
+
+    .calc-panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .currency-toggle {
+      display: inline-flex;
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: 999px;
+      padding: 3px;
+      gap: 2px;
+    }
+
+    .curr-btn {
+      appearance: none;
+      background: transparent;
+      border: none;
+      color: var(--muted);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      padding: 0.35rem 0.85rem;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: background 0.15s ease, color 0.15s ease;
+    }
+
+    .curr-btn.active {
+      background: var(--gold);
+      color: var(--navy);
+    }
+
+    .curr-btn:not(.active):hover {
+      color: #F4F7FA;
+    }
 
     .calc-grid {
       display: grid;
