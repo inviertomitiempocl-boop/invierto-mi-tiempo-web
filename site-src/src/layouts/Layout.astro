@@ -1,0 +1,133 @@
+---
+interface Props {
+  title: string;
+  description?: string;
+}
+const { title, description = 'Invierto Mi Tiempo — dividendos, inversión y automatización.' } = Astro.props;
+---
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title} · Invierto Mi Tiempo</title>
+    <meta name="description" content={description} />
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%230F2840%22/><text x=%2250%22 y=%2266%22 font-size=%2258%22 text-anchor=%22middle%22 fill=%22%23F0A500%22 font-family=%22sans-serif%22 font-weight=%22bold%22>i</text></svg>" />
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="/">
+        <span class="brand-mark">IMT</span>
+        <span class="brand-name">Invierto Mi Tiempo</span>
+      </a>
+      <nav>
+        <a href="/articulos/">Artículos</a>
+        <a href="/nosotros/">Sobre el proyecto</a>
+        <a href="/privacidad/">Privacidad</a>
+      </nav>
+    </header>
+
+    <main>
+      <slot />
+    </main>
+
+    <footer class="site-footer">
+      <p>© {new Date().getFullYear()} Invierto Mi Tiempo. Contenido educativo, no constituye asesoría de inversión.</p>
+    </footer>
+
+    <style>
+      :root {
+        --navy: #0F2840;
+        --navy-2: #162F4A;
+        --navy-3: #1E3A5F;
+        --gold: #F0A500;
+        --muted: #8EA8C0;
+        --bg-light: #EEF2F7;
+      }
+
+      * { box-sizing: border-box; }
+
+      html, body {
+        margin: 0;
+        padding: 0;
+        background: var(--navy);
+        color: #F4F7FA;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        line-height: 1.6;
+      }
+
+      .site-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1.25rem 2rem;
+        background: var(--navy-2);
+        border-bottom: 1px solid rgba(255,255,255,0.08);
+        flex-wrap: wrap;
+        gap: 1rem;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        text-decoration: none;
+        color: inherit;
+      }
+
+      .brand-mark {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 2.25rem;
+        height: 2.25rem;
+        border-radius: 0.5rem;
+        background: var(--gold);
+        color: var(--navy);
+        font-weight: 800;
+        font-size: 0.85rem;
+      }
+
+      .brand-name {
+        font-weight: 700;
+        font-size: 1.05rem;
+        letter-spacing: 0.01em;
+      }
+
+      nav {
+        display: flex;
+        gap: 1.5rem;
+        flex-wrap: wrap;
+      }
+
+      nav a {
+        color: var(--muted);
+        text-decoration: none;
+        font-size: 0.95rem;
+        font-weight: 500;
+      }
+
+      nav a:hover { color: var(--gold); }
+
+      main {
+        max-width: 860px;
+        margin: 0 auto;
+        padding: 3rem 1.5rem 4rem;
+        min-height: 60vh;
+      }
+
+      .site-footer {
+        padding: 2rem;
+        text-align: center;
+        color: var(--muted);
+        font-size: 0.85rem;
+        border-top: 1px solid rgba(255,255,255,0.08);
+      }
+
+      main :global(h1) { font-size: 2.1rem; margin-bottom: 0.5rem; }
+      main :global(h2) { font-size: 1.4rem; color: var(--gold); margin-top: 2.5rem; }
+      main :global(a) { color: var(--gold); }
+      main :global(p) { color: #DCE6EF; }
+    </style>
+  </body>
+</html>

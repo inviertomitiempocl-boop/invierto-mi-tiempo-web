@@ -1,0 +1,64 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+<Layout title="Política de privacidad" description="Política de privacidad de la app Invierto Mi Tiempo.">
+  <h1>Política de privacidad</h1>
+  <p><em>Última actualización: {new Date().toLocaleDateString('es-CL', { year: 'numeric', month: 'long', day: 'numeric' })}</em></p>
+
+  <p>
+    Esta política aplica a la aplicación móvil <strong>Invierto Mi Tiempo</strong> y a este
+    sitio web. La aplicación fue diseñada para funcionar <strong>sin necesidad de crear una
+    cuenta</strong> — a continuación explicamos qué información se maneja y cómo.
+  </p>
+
+  <h2>No creamos cuentas ni pedimos datos personales</h2>
+  <p>
+    La app no requiere registro, login, ni ningún dato personal (nombre, correo, teléfono)
+    para funcionar. No existe un sistema de cuentas de usuario.
+  </p>
+
+  <h2>Tu lista de seguimiento (watchlist)</h2>
+  <p>
+    Los tickers que agregas para hacer seguimiento se guardan <strong>únicamente en tu
+    dispositivo</strong>, de forma local. No se envía ni se almacena en nuestros servidores
+    ninguna lista asociada a ti como persona — si desinstalas la app, esa información se
+    pierde y no queda registro en nuestro lado.
+  </p>
+
+  <h2>Qué se envía a nuestro servidor</h2>
+  <p>
+    Para mostrar precios y puntajes, la app consulta un servicio propio enviando únicamente
+    los símbolos (tickers) que quieres consultar — por ejemplo "AAPL" o "SCHD". Esta consulta
+    no incluye tu nombre, identificador de cuenta, ni ningún dato que te identifique
+    personalmente.
+  </p>
+
+  <h2>Publicidad</h2>
+  <p>
+    La app se financia mediante publicidad, mostrada a través de <strong>Google AdMob</strong>.
+    AdMob puede recopilar identificadores del dispositivo y datos de uso para mostrar anuncios
+    relevantes, conforme a la
+    <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">política de
+    privacidad de Google</a>. Puedes gestionar tus preferencias de anuncios personalizados
+    desde la configuración de tu dispositivo Android (Configuración → Google → Anuncios).
+  </p>
+
+  <h2>Terceros</h2>
+  <p>
+    Usamos proveedores de datos financieros de mercado (como Yahoo Finance y EODHD) para
+    calcular precios y puntajes. Estas consultas no incluyen información personal tuya —
+    solo el símbolo bursátil consultado.
+  </p>
+
+  <h2>Cambios a esta política</h2>
+  <p>
+    Si esta política cambia, actualizaremos esta misma página con la nueva fecha de
+    actualización.
+  </p>
+
+  <h2>Contacto</h2>
+  <p>
+    Si tienes preguntas sobre esta política, puedes escribirnos a través de los canales de
+    contacto indicados en <a href="/nosotros/">Sobre el proyecto</a>.
+  </p>
+</Layout>
