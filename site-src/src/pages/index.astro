@@ -2,23 +2,132 @@
 import Layout from '../layouts/Layout.astro';
 ---
 <Layout title="Inicio" description="Dividendos, inversión y automatización — el proceso real de un inversionista, documentado.">
-  <h1>Invierto Mi Tiempo</h1>
-  <p>
-    Documento mi proceso como inversionista en dividendos, con análisis reales de mis
-    decisiones y las automatizaciones (incluyendo IA) que uso para tomarlas. La idea es
-    simple: mostrar cómo rinde realmente, sin promesas ni recomendaciones — solo el proceso,
-    los números y lo que aprendo en el camino.
-  </p>
+  <section class="hero">
+    <div class="hero-text">
+      <span class="panel-tag mono">// invierto_mi_tiempo.log</span>
+      <h1>El proceso real detrás de<br />invertir en dividendos.</h1>
+      <p class="prose">
+        Documento mis decisiones de inversión con los mismos datos y criterios que uso
+        en privado — incluyendo cómo automatizo el análisis con IA. Sin promesas de
+        rentabilidad: solo el proceso, los números, y lo que realmente funciona.
+      </p>
+    </div>
+    <div class="hero-chart" aria-hidden="true">
+      <svg viewBox="0 0 320 160" class="chart-svg">
+        <defs>
+          <linearGradient id="chartFill" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#F0A500" stop-opacity="0.35" />
+            <stop offset="100%" stop-color="#F0A500" stop-opacity="0" />
+          </linearGradient>
+        </defs>
+        <polyline class="chart-line" points="0,120 40,110 70,125 100,90 140,95 170,60 200,70 230,40 260,45 320,10" />
+        <polygon class="chart-fill" fill="url(#chartFill)" points="0,120 40,110 70,125 100,90 140,95 170,60 200,70 230,40 260,45 320,10 320,160 0,160" />
+      </svg>
+    </div>
+  </section>
 
-  <h2>La app</h2>
-  <p>
-    Además del canal, construí una aplicación para hacer seguimiento de empresas de interés
-    con un puntaje basado en fundamentos — gratuita, sin necesidad de crear cuenta.
-  </p>
+  <div class="stat-grid">
+    <div class="stat-card">
+      <span class="stat-num" data-count="16">0</span>
+      <span class="stat-label">criterios de análisis por empresa</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-num" data-count="250">0</span>
+      <span class="stat-label">empresas y ETFs monitoreados</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-num mono">24/7</span>
+      <span class="stat-label">automatización con IA</span>
+    </div>
+  </div>
 
-  <h2>Artículos</h2>
-  <p>
-    Acá vas a encontrar el contenido extendido que no cabe en un video: análisis, guías y
-    reflexiones sobre inversión en dividendos. <a href="/articulos/">Ver todos los artículos →</a>
-  </p>
+  <div class="data-panel">
+    <span class="panel-tag">[ APP ]</span>
+    <h2 style="margin-top:0">Seguimiento de empresas, sin fricción</h2>
+    <p>
+      Construí una aplicación gratuita para hacer seguimiento de empresas de interés,
+      con un puntaje basado en fundamentos — sin necesidad de crear cuenta.
+    </p>
+  </div>
+
+  <div class="data-panel">
+    <span class="panel-tag">[ ARTÍCULOS ]</span>
+    <h2 style="margin-top:0">Contenido extendido</h2>
+    <p>
+      Acá vas a encontrar el análisis que no cabe en un video: guías, reflexiones y el
+      detalle de cada decisión. <a href="/articulos/">Ver todos los artículos →</a>
+    </p>
+  </div>
+
+  <script>
+    const counters = document.querySelectorAll<HTMLElement>('.stat-num[data-count]');
+    const animate = (el: HTMLElement) => {
+      const target = parseInt(el.dataset.count || '0', 10);
+      const duration = 1200;
+      const start = performance.now();
+      const step = (now: number) => {
+        const progress = Math.min((now - start) / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        el.textContent = Math.round(eased * target).toString();
+        if (progress < 1) requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          animate(entry.target as HTMLElement);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.4 });
+
+    counters.forEach((el) => observer.observe(el));
+  </script>
+
+  <style>
+    .hero {
+      display: grid;
+      grid-template-columns: 1.3fr 1fr;
+      gap: 2.5rem;
+      align-items: center;
+      padding-bottom: 1rem;
+    }
+
+    .hero h1 {
+      font-size: 2.5rem;
+      line-height: 1.15;
+      margin: 0.75rem 0 1rem;
+    }
+
+    .hero-chart {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 0.75rem;
+      padding: 1rem;
+    }
+
+    .chart-svg { width: 100%; height: auto; display: block; }
+
+    .chart-line {
+      fill: none;
+      stroke: #F0A500;
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-dasharray: 500;
+      stroke-dashoffset: 500;
+      animation: draw-line 1.8s ease forwards 0.2s;
+    }
+
+    @keyframes draw-line {
+      to { stroke-dashoffset: 0; }
+    }
+
+    @media (max-width: 780px) {
+      .hero { grid-template-columns: 1fr; }
+      .hero h1 { font-size: 2rem; }
+    }
+  </style>
 </Layout>

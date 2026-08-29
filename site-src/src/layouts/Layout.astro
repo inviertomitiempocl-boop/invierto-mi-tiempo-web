@@ -1,4 +1,6 @@
 ---
+import TickerTape from '../components/TickerTape.astro';
+
 interface Props {
   title: string;
   description?: string;
@@ -12,6 +14,9 @@ const { title, description = 'Invierto Mi Tiempo — dividendos, inversión y au
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title} · Invierto Mi Tiempo</title>
     <meta name="description" content={description} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%230F2840%22/><text x=%2250%22 y=%2266%22 font-size=%2258%22 text-anchor=%22middle%22 fill=%22%23F0A500%22 font-family=%22sans-serif%22 font-weight=%22bold%22>i</text></svg>" />
   </head>
   <body>
@@ -24,8 +29,11 @@ const { title, description = 'Invierto Mi Tiempo — dividendos, inversión y au
         <a href="/articulos/">Artículos</a>
         <a href="/nosotros/">Sobre el proyecto</a>
         <a href="/privacidad/">Privacidad</a>
+        <span class="status-tag mono"><span class="live-dot"></span> datos en vivo</span>
       </nav>
     </header>
+
+    <TickerTape />
 
     <main>
       <slot />
@@ -50,21 +58,33 @@ const { title, description = 'Invierto Mi Tiempo — dividendos, inversión y au
       html, body {
         margin: 0;
         padding: 0;
-        background: var(--navy);
+        background:
+          radial-gradient(ellipse 900px 500px at 15% -10%, rgba(240,165,0,0.10), transparent 60%),
+          linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px) 0 0 / 100% 42px,
+          linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px) 0 0 / 42px 100%,
+          var(--navy);
         color: #F4F7FA;
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         line-height: 1.6;
+      }
+
+      :global(.mono) {
+        font-family: 'JetBrains Mono', 'Consolas', monospace;
       }
 
       .site-header {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: 1.25rem 2rem;
-        background: var(--navy-2);
+        padding: 1.1rem 2rem;
+        background: rgba(22, 47, 74, 0.75);
+        backdrop-filter: blur(10px);
         border-bottom: 1px solid rgba(255,255,255,0.08);
         flex-wrap: wrap;
         gap: 1rem;
+        position: sticky;
+        top: 0;
+        z-index: 10;
       }
 
       .brand {
@@ -109,11 +129,98 @@ const { title, description = 'Invierto Mi Tiempo — dividendos, inversión y au
 
       nav a:hover { color: var(--gold); }
 
+      .status-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        font-size: 0.72rem;
+        color: #2ECC71;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+
+      .live-dot {
+        display: inline-block;
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: #2ECC71;
+        box-shadow: 0 0 0 rgba(46,204,113,0.6);
+        animation: pulse-dot 2s infinite;
+      }
+
+      @keyframes pulse-dot {
+        0% { box-shadow: 0 0 0 0 rgba(46,204,113,0.6); }
+        70% { box-shadow: 0 0 0 6px rgba(46,204,113,0); }
+        100% { box-shadow: 0 0 0 0 rgba(46,204,113,0); }
+      }
+
       main {
-        max-width: 860px;
+        max-width: 1040px;
         margin: 0 auto;
         padding: 3rem 1.5rem 4rem;
         min-height: 60vh;
+      }
+
+      main :global(.prose) {
+        max-width: 720px;
+      }
+
+      main :global(.data-panel) {
+        background: linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0.015));
+        border: 1px solid rgba(255,255,255,0.09);
+        border-left: 3px solid var(--gold);
+        border-radius: 0.6rem;
+        padding: 1.5rem 1.75rem;
+        margin-top: 1.5rem;
+        transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      main :global(.data-panel:hover) {
+        border-color: rgba(240,165,0,0.5);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+      }
+
+      main :global(.panel-tag) {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.72rem;
+        color: var(--gold);
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        display: block;
+        margin-bottom: 0.6rem;
+      }
+
+      main :global(.stat-grid) {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 1rem;
+        margin: 2rem 0;
+      }
+
+      main :global(.stat-card) {
+        background: rgba(255,255,255,0.03);
+        border: 1px solid rgba(255,255,255,0.08);
+        border-radius: 0.6rem;
+        padding: 1.1rem 1.25rem;
+        text-align: left;
+      }
+
+      main :global(.stat-num) {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 1.9rem;
+        font-weight: 700;
+        color: var(--gold);
+        display: block;
+        line-height: 1.1;
+      }
+
+      main :global(.stat-label) {
+        font-size: 0.78rem;
+        color: var(--muted);
+        margin-top: 0.35rem;
+        display: block;
       }
 
       .site-footer {

@@ -1,0 +1,67 @@
+---
+const items = [
+  { t: 'AAPL', v: '+1.24%', up: true },
+  { t: 'SCHD', v: '+0.42%', up: true },
+  { t: 'VICI', v: '-0.31%', up: false },
+  { t: 'O', v: '+0.18%', up: true },
+  { t: 'JEPI', v: '+0.65%', up: true },
+  { t: 'KO', v: '-0.09%', up: false },
+  { t: 'JNJ', v: '+0.27%', up: true },
+  { t: 'NNN', v: '+0.55%', up: true },
+  { t: 'STAG', v: '-0.14%', up: false },
+  { t: 'HABITAT.SN', v: '+0.88%', up: true },
+];
+---
+<div class="ticker-tape" aria-hidden="true">
+  <div class="ticker-track">
+    {[...items, ...items].map((i) => (
+      <span class="ticker-item">
+        <span class="ticker-sym">{i.t}</span>
+        <span class:list={['ticker-val', i.up ? 'up' : 'down']}>{i.v}</span>
+      </span>
+    ))}
+  </div>
+</div>
+
+<style>
+  .ticker-tape {
+    background: #0A1D31;
+    border-bottom: 1px solid rgba(240,165,0,0.15);
+    overflow: hidden;
+    white-space: nowrap;
+    padding: 0.4rem 0;
+  }
+
+  .ticker-track {
+    display: inline-flex;
+    animation: scroll-left 32s linear infinite;
+  }
+
+  .ticker-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: 'JetBrains Mono', 'Consolas', monospace;
+    font-size: 0.78rem;
+    padding: 0 1.25rem;
+    border-right: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .ticker-sym {
+    color: #B9C9DA;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+  }
+
+  .ticker-val.up { color: #2ECC71; }
+  .ticker-val.down { color: #FF5C5C; }
+
+  @keyframes scroll-left {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ticker-track { animation: none; }
+  }
+</style>
