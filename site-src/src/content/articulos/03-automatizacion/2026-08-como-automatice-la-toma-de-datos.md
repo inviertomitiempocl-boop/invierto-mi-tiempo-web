@@ -30,12 +30,14 @@ resultado.
 
 ## De dónde salen los datos
 
-El sistema consulta proveedores de datos financieros de mercado —los mismos que alimentan
-a la mayoría de las plataformas de inversión— para obtener precios, balances y estados de
-resultados de cada empresa. Cuando el proveedor principal no tiene cobertura de algo
-puntual, hay un segundo proveedor de respaldo que completa el dato. No comparto los
-detalles técnicos de cómo está conectado esto porque no le aporta nada al lector y sí es
-información que prefiero mantener reservada por seguridad.
+Uso **Yahoo Finance** como fuente principal: de ahí saco precios, balances y estados de
+resultados de cada empresa. Es la misma fuente que usan de fondo muchas plataformas y
+herramientas de inversión, no algo exclusivo mío. Cuando Yahoo Finance no tiene cobertura
+de algo puntual —pasa más seguido de lo que uno pensaría, sobre todo con empresas chilenas
+o REITs más chicos— tengo un segundo proveedor de respaldo, **EODHD**, que completa el
+dato. No entro en el detalle técnico de cómo están conectados ambos ni de la
+infraestructura que corre detrás, porque no le aporta nada al lector y sí es información
+que prefiero mantener reservada por seguridad.
 
 ## El puntaje: un mismo criterio, aplicado siempre igual
 
