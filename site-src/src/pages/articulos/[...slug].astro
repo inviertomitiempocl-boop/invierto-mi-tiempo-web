@@ -1,0 +1,53 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import { CATEGORIAS } from '../../lib/categorias';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('articulos', ({ data }) => data.estado === 'publicado');
+  return entries.map((entry) => ({
+    params: { slug: `${entry.data.categoria}/${entry.data.url_slug}` },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props as { entry: CollectionEntry<'articulos'> };
+const { Content } = await entry.render();
+const { titulo, meta_descripcion, categoria, fecha, tags } = entry.data;
+---
+<Layout title={titulo} description={meta_descripcion}>
+  <div class="prose article">
+    <span class="panel-tag mono">// {CATEGORIAS[categoria]}</span>
+    <h1>{titulo}</h1>
+    <p class="article-meta mono">
+      {fecha.toLocaleDateString('es-CL', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' })}
+      {tags.length > 0 && <> · {tags.join(', ')}</>}
+    </p>
+    <div class="article-body">
+      <Content />
+    </div>
+  </div>
+
+  <style>
+    .article-meta {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-top: -0.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .article-body :global(img) {
+      max-width: 100%;
+      height: auto;
+      border-radius: 0.6rem;
+      border: 1px solid rgba(255,255,255,0.08);
+      margin: 1.5rem 0;
+    }
+
+    .article-body :global(h2) {
+      font-size: 1.4rem;
+      color: var(--gold);
+      margin-top: 2.5rem;
+    }
+  </style>
+</Layout>

@@ -1,13 +1,41 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+import { CATEGORIAS } from '../../lib/categorias';
+
+const publicados = (await getCollection('articulos', ({ data }) => data.estado === 'publicado'))
+  .sort((a, b) => b.data.fecha.valueOf() - a.data.fecha.valueOf());
 ---
 <Layout title="Artículos" description="Análisis y guías sobre inversión en dividendos.">
   <div class="prose">
     <span class="panel-tag mono">// articulos</span>
     <h1>Artículos</h1>
-    <p>
-      Todavía no hay artículos publicados — estamos preparando el primer contenido.
-      Vuelve pronto.
-    </p>
   </div>
+
+  {publicados.length === 0 ? (
+    <div class="prose">
+      <p>
+        Todavía no hay artículos publicados — estamos preparando el primer contenido.
+        Vuelve pronto.
+      </p>
+    </div>
+  ) : (
+    <div class="lista-articulos">
+      {publicados.map((entry) => (
+        <a class="data-panel articulo-card" href={`/articulos/${entry.data.categoria}/${entry.data.url_slug}/`}>
+          <span class="panel-tag">{CATEGORIAS[entry.data.categoria]}</span>
+          <h2 style="margin-top:0">{entry.data.titulo}</h2>
+          <p>{entry.data.meta_descripcion}</p>
+        </a>
+      ))}
+    </div>
+  )}
+
+  <style>
+    .articulo-card {
+      display: block;
+      text-decoration: none;
+      color: inherit;
+    }
+  </style>
 </Layout>
