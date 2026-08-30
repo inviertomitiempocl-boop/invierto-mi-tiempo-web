@@ -10,7 +10,7 @@ enlaza_a_fundamentos: []
 pilares:
   youtube: ""
   instagram: ""
-estado: borrador
+estado: publicado
 ---
 
 ![Ilustración del personaje de Invierto Mi Tiempo señalando un panel de indicadores conectado por una flecha a un ícono de balanza, representando cómo los datos se convierten en una decisión](./imagenes/nace-invierto-mi-tiempo/01-portada-indicadores-decision.png)
