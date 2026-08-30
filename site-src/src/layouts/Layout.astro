@@ -1,6 +1,4 @@
 ---
-import TickerTape from '../components/TickerTape.astro';
-
 interface Props {
   title: string;
   description?: string;
@@ -32,8 +30,6 @@ const { title, description = 'Invierto Mi Tiempo — dividendos, inversión y au
         <a href="/privacidad/">Privacidad</a>
       </nav>
     </header>
-
-    <TickerTape />
 
     <main>
       <slot />
@@ -128,32 +124,6 @@ const { title, description = 'Invierto Mi Tiempo — dividendos, inversión y au
       }
 
       nav a:hover { color: var(--gold); }
-
-      .status-tag {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.45rem;
-        font-size: 0.72rem;
-        color: #2ECC71;
-        letter-spacing: 0.04em;
-        text-transform: uppercase;
-      }
-
-      .live-dot {
-        display: inline-block;
-        width: 6px;
-        height: 6px;
-        border-radius: 50%;
-        background: #2ECC71;
-        box-shadow: 0 0 0 rgba(46,204,113,0.6);
-        animation: pulse-dot 2s infinite;
-      }
-
-      @keyframes pulse-dot {
-        0% { box-shadow: 0 0 0 0 rgba(46,204,113,0.6); }
-        70% { box-shadow: 0 0 0 6px rgba(46,204,113,0); }
-        100% { box-shadow: 0 0 0 0 rgba(46,204,113,0); }
-      }
 
       main {
         max-width: 1040px;
